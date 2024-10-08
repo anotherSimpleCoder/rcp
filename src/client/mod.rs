@@ -12,8 +12,8 @@ pub fn send(filename: &str, destination_addr: &str) {
     let header: Vec<u8> = header(new_filename);
     let data: Vec<u8> = data(header, compressed_file_data);
 
-    let mut stream = TcpStream::connect(address)
-        .expect(format!("ClientError: Couldn't connect to {}\n", address).as_str());
+    let mut stream = TcpStream::connect(&address)
+        .expect(format!("ClientError: Couldn't connect to {}\n", &address).as_str());
 
     stream.write_all(data.as_slice())
         .expect("ClientError: Couldn't send files to server.");
@@ -21,16 +21,16 @@ pub fn send(filename: &str, destination_addr: &str) {
     gui::message("rcp", "File request sent!");
 }
 
-fn parse_address(address: &str) -> (&str, &str) {
+fn parse_address(address: &str) -> (&str, String) {
     let splitted: Vec<&str> = address.split('@').collect();
-    let (filename, mut address) = (splitted[0], splitted[1]);
+    let (filename, address) = (splitted[0], splitted[1]);
 
     if !address.contains(':') {
         let new_address = format!("{}:3000", address);
-        return (filename, new_address.as_str())
+        return (filename, new_address)
     }
 
-    (filename, address)
+    (filename, String::from(address))
 }
 fn header(filename: &str) -> Vec<u8> {
     let mut headers = Vec::new();
