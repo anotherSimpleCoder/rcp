@@ -12,7 +12,7 @@ pub fn read_file(path: &str) -> Vec<u8> {
     buffer
 }
 
-pub fn write_file(buf: Vec<u8>, name: &str) {
+pub fn _write_file(buf: Vec<u8>, name: &str) {
     let mut file = File::create(name)
         .expect("Could not create audio file");
 
