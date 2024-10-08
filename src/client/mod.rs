@@ -26,7 +26,7 @@ fn parse_address(address: &str) -> (&str, &str) {
     let (filename, mut address) = (splitted[0], splitted[1]);
 
     if !address.contains(':') {
-        address = format!("{}:3000", address).as_str();
+        return (filename, format!("{}:3000", address).as_str())
     }
 
     (filename, address)
