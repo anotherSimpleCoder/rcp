@@ -15,13 +15,11 @@ pub fn send(filename: &str, destination_addr: &str) {
 
     let mut data: Vec<u8> = Vec::new();
     data.extend((header.len() as u32).to_be_bytes());
-    data.extend("HBEG".as_bytes());
+    data.extend("RHDR".as_bytes());
     data.extend(header);
-    data.extend("HEND".as_bytes());
     data.extend(compressed_file_data.len().to_be_bytes());
-    data.extend("DBEG".as_bytes());
+    data.extend("RDAT".as_bytes());
     data.extend(compressed_file_data);
-    data.extend("DEND".as_bytes());
 
 
     let mut stream = TcpStream::connect(format!("{}:3000", destination_addr).as_str())
