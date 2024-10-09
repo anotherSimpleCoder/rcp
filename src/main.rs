@@ -14,5 +14,6 @@ fn main() {
 }
 
 fn route(args: &Vec<String>) {
-    client::send(args[0].as_str(), args[1].as_str());
+    client::send(args[0].as_str(), args[1].as_str())
+        .expect("Error: Could not send data!");
 }

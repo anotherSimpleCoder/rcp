@@ -1,21 +1,41 @@
 use std::{fs::File, io::Read};
 use std::io::Write;
 
-pub fn read_file(path: &str) -> Vec<u8> {
+pub fn read_file(path: &str) -> Result<Vec<u8>, String> {
     let mut buffer: Vec<u8> = Vec::new();
-    let mut file = File::open(path)
-        .expect(format!("FileError: Error opening file {}\n", path).as_str());
+    let file_result = File::open(path);
 
-    let _ = file.read_to_end(&mut buffer)
-        .expect(format!("FileError: Error reading file {}\n", path).as_str());
-    
-    buffer
+    match file_result {
+        Ok(mut file) => {
+            let read_result = file.read_to_end(&mut buffer);
+
+            if read_result.is_err() {
+                return Err(format!("FileError: Error reading file {}\n", path));
+            }
+        },
+
+        Err(_) => {
+            return Err(format!("FileError: Error opening file {}\n", path));
+        }
+    }
+
+    Ok(buffer)
 }
 
-pub fn _write_file(buf: Vec<u8>, name: &str) {
-    let mut file = File::create(name)
-        .expect("Could not create audio file");
+pub fn _write_file(buf: Vec<u8>, name: &str) -> Result<(), String> {
+    let file = File::create(name);
 
-    file.write_all(buf.as_slice())
-        .expect("Could not write audio file");
+    match file {
+        Ok(mut file) => {
+            let write_result = file.write_all(buf.as_slice());
+
+            if write_result.is_err() {
+                return Err(String::from("FileError: Error writing file!"));
+            }
+
+            drop(file);
+            Ok(())
+        },
+        Err(e) => Err(format!("FileError: Could not create file: {}", e))
+    }
 }
