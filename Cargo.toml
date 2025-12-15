@@ -1,8 +1,0 @@
-[package]
-name = "rcp"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-miniz_oxide = "0.8.0"
-rfd = "0.10"
